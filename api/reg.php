@@ -40,4 +40,31 @@ $_SESSION['requests'][$userIp][] = $currentTime;
 
 
 
+
+
+// 创建连接
+$connection = mysqli_connect('154.40.45.50', 'uhup_user', 'gg20130428', 'uhup');
+
+// 检查连接
+if (!$connection) {
+    die("连接失败: " . mysqli_connect_error());
+}
+
+// 执行查询
+$sql = "SELECT id, name FROM users";
+$result = mysqli_query($connection, $sql);
+
+// 检查结果并输出
+if (mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+        echo "id: " . $row["id"] . " - Name: " . $row["name"] . "<br>";
+    }
+} else {
+    echo "0 结果";
+}
+
+// 关闭连接
+mysqli_close($connection);
+
+
 ?>
