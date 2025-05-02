@@ -1,10 +1,4 @@
 <?php 
-// 设置返回格式为 JSON
-header(header: 'Content-Type: application/json');
-
-// 允许跨域（开发时用）
-header(header: 'Access-Control-Allow-Origin: *');
-
 session_start(); // 启用会话
 
 // 设置最大请求次数和时间窗口（秒）
@@ -20,10 +14,15 @@ if (!isset($_SESSION['requests'])) {
     $_SESSION['requests'] = [];
 }
 
+// 检查是否已经为当前用户设置过请求记录
+if (!isset($_SESSION['requests'][$userIp])) {
+    $_SESSION['requests'][$userIp] = [];
+}
+
 // 清理过期的请求
-foreach ($_SESSION['requests'] as $key => $request) {
+foreach ($_SESSION['requests'][$userIp] as $key => $request) {
     if ($request < $currentTime - $timeWindow) {
-        unset($_SESSION['requests'][$key]);
+        unset($_SESSION['requests'][$userIp][$key]);
     }
 }
 
